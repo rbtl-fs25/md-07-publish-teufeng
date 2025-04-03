@@ -2,9 +2,7 @@
 title: "A minimal example"
 date: today
 author: Gian Teufen
-format:
-  html:
-    toc: true
+format: revealjs
 execute:
   warning: false
 editor: visual
