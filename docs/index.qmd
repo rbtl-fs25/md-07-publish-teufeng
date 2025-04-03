@@ -1,0 +1,63 @@
+---
+title: "A minimal example"
+date: today
+author: First Last 
+format:
+  html:
+    toc: true
+execute:
+  warning: false
+editor: visual
+---
+
+## Data
+
+For this analysis we'll use the penguins dataset from the palmerpenguins R package.
+
+```{r}
+#| label: load-packages
+
+library(tidyverse)
+library(ggthemes)
+library(palmerpenguins)
+library(gt)
+```
+
+## Species
+
+@fig-penguins is a scatterplot of species of penguins.
+
+```{r}
+#| fig-cap: Bill length and depth of penguins
+#| label: fig-penguins
+
+ggplot(data = penguins,
+       mapping = aes(x = bill_length_mm, 
+                     y = bill_depth_mm,
+                     color = species,
+                     shape = species)) +
+  geom_point() +
+  scale_color_colorblind() +
+  labs(x = "Bill length (mm)", y = "Bill depth (mm)") +
+  theme_minimal()
+```
+
+## Penguins
+
+@tbl-penguins shows a summary of for the bill depth of penguins by island and species.
+
+```{r}
+#| label: tbl-penguins
+#| tbl-cap: Bill depth of penquins by island and species.
+
+penguins |> 
+  filter(!is.na(bill_depth_mm)) |> 
+  group_by(island, species) |>
+  summarise(n = n(),
+            mean_bill_depth = mean(bill_depth_mm),
+            sd_bill_depth = sd(bill_depth_mm)) |>
+  ungroup() |> 
+  gt() |> 
+  fmt_number(columns = c(mean_bill_depth, sd_bill_depth),
+             decimals = 1)
+```
